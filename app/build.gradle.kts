@@ -50,7 +50,7 @@ android {
         noCompress += listOf("kw", "ttf", "otf")
     }
     compileSdk {
-        version = release(37)
+        version = release(36)
     }
 
     defaultConfig {
