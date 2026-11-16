@@ -10,6 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.discord.views.GlassChromeView
+        android:id="@+id/app_glass_chrome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ScrollView
         android:id="@+id/app_loading"
         android:layout_width="match_parent"

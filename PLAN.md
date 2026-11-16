@@ -100,7 +100,7 @@ coverage and passing builds do not establish complete behavioral parity.
 | Phase | Area | Status | Remaining verification/work |
 | --- | --- | --- | --- |
 | 0 | Build and XML shell | DONE | Maintain build and launch regressions |
-| 1 | Resources, themes and custom views | IN PROGRESS | Qualifiers, accessibility, animations and full view behavior |
+| 1 | Resources, themes and custom views | IN PROGRESS | Qualifiers, accessibility, animations and full view behavior; liquid-glass settings, live preview, activity chrome and shared toolbar pills are in place, broader card/sheet surface rollout remains |
 | 2 | Original native media spike | DONE | Historical x86_64 lifecycle evidence; not a blanket voice-parity claim |
 | 3 | Core runtime and stores | IN PROGRESS | Reconcile remaining graph/init/reset seams and full semantic state |
 | 4 | REST and Gateway | IN PROGRESS | Destination-store behavior, malformed payloads and live compatibility |

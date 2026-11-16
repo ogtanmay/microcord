@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import androidx.annotation.StringRes
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
@@ -18,6 +19,7 @@ import com.discord.utilities.theme.ThemeColorParser
 import com.discord.utilities.theme.ThemeDefinition
 import com.discord.utilities.theme.ThemeResolver
 import com.discord.utilities.theme.ThemeRuntime
+import com.discord.utilities.theme.GlassAppearance
 import com.discord.views.RadioManager
 import com.discord.widgets.notice.WidgetNoticeDialog
 import com.discord.widgets.settings.profile.ProfileColorPickerDialog
@@ -43,6 +45,7 @@ class WidgetSettingsThemeEditor : ThemeEditorPage(R.layout.widget_settings_theme
             if (item.itemId == R.id.menu_theme_editor_reset) confirmReset()
         })
         binding.themeEditorPreview.setImageDrawable(preview)
+        configureGlassControls()
         binding.themeEditorName.setText(theme.manifest.name)
         binding.themeEditorAuthor.setText(theme.manifest.author)
         binding.themeEditorName.doAfterTextChanged { text ->
@@ -82,6 +85,7 @@ class WidgetSettingsThemeEditor : ThemeEditorPage(R.layout.widget_settings_theme
         val binding = _binding ?: return
         val context = requireContext()
         preview.colors = ThemePreviewDrawable.colorsOf(context, theme, theme.base)
+        binding.themeEditorGlassPreview.setState(GlassAppearance.read())
         baseRadios.setChecked(bases.getValue(theme.base))
         binding.themeEditorQuickColors.removeAllViews()
         QUICK_COLORS.forEach { (key, label) -> addQuickColor(binding.themeEditorQuickColors, key, label) }
@@ -97,6 +101,41 @@ class WidgetSettingsThemeEditor : ThemeEditorPage(R.layout.widget_settings_theme
         )
         addPage(pages, R.string.microcord_theme_fonts, count(theme.fonts.size), WidgetSettingsThemeFiles::class.java, WidgetSettingsThemeFiles.KIND_FONTS)
         addPage(pages, R.string.microcord_theme_sounds, count(theme.raws.size), WidgetSettingsThemeFiles::class.java, WidgetSettingsThemeFiles.KIND_SOUNDS)
+    }
+
+    private fun configureGlassControls() {
+        val initial = GlassAppearance.read()
+        binding.themeEditorGlassEnabled.isChecked = initial.enabled
+        binding.themeEditorGlassBlur.progress = initial.blurRadius
+        binding.themeEditorGlassOpacity.progress = initial.opacity
+        binding.themeEditorGlassVibrancy.progress = initial.vibrancy
+        binding.themeEditorGlassEnabled.setOnCheckedChangeListener { _, enabled ->
+            saveGlass(GlassAppearance.read().copy(enabled = enabled))
+        }
+        val listener = object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (!fromUser) return
+                val current = GlassAppearance.read()
+                saveGlass(
+                    when (seekBar.id) {
+                        R.id.theme_editor_glass_blur -> current.copy(blurRadius = progress)
+                        R.id.theme_editor_glass_opacity -> current.copy(opacity = progress)
+                        else -> current.copy(vibrancy = progress)
+                    },
+                )
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
+        }
+        binding.themeEditorGlassBlur.setOnSeekBarChangeListener(listener)
+        binding.themeEditorGlassOpacity.setOnSeekBarChangeListener(listener)
+        binding.themeEditorGlassVibrancy.setOnSeekBarChangeListener(listener)
+    }
+
+    private fun saveGlass(state: GlassAppearance.State) {
+        GlassAppearance.write(state)
+        binding.themeEditorGlassPreview.setState(state)
     }
 
     private fun count(changed: Int) = if (changed == 0) getString(R.string.microcord_theme_file_default) else getString(R.string.microcord_theme_changes, changed)

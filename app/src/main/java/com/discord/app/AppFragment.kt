@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -21,6 +22,7 @@ import com.discord.i18n.i18nFormat
 import com.discord.utilities.view.ToastManager
 import com.discord.utilities.view.text.TextWatcher
 import com.discord.views.ToolbarTitleLayout
+import com.discord.views.GlassPillOverlay
 import java.io.File
 import java.io.IOException
 import rx.subjects.PublishSubject
@@ -78,6 +80,7 @@ abstract class AppFragment : Fragment, AppComponent, AppPermissionsRequests, App
         drawUnderSystemBars(view)
         onViewBound(view)
         ThemeWallpaper.decorate(this, view)
+        decorateToolbarWithGlass(view)
         onViewBoundOrOnResume()
         onViewBoundOrOnResumeInvoked = true
         BounceEdgeEffectFactory.installAll(view)
@@ -91,6 +94,25 @@ abstract class AppFragment : Fragment, AppComponent, AppPermissionsRequests, App
     @CallSuper
     open fun onViewBoundOrOnResume() {
         appLogger.logImpression()
+    }
+
+    private fun decorateToolbarWithGlass(view: View) {
+        val toolbar = view.findViewById<Toolbar>(R.id.action_bar_toolbar) ?: return
+        val parent = toolbar.parent as? ViewGroup ?: return
+        if ((0 until parent.childCount).any { parent.getChildAt(it) is GlassPillOverlay }) return
+        val overlay = GlassPillOverlay(requireContext())
+        val index = parent.indexOfChild(toolbar) + 1
+        parent.addView(
+            overlay,
+            index,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, toolbar.layoutParams.height),
+        )
+        overlay.post {
+            overlay.layoutParams = overlay.layoutParams.apply {
+                width = toolbar.width
+                height = toolbar.height
+            }
+        }
     }
 
     override fun onResume() {

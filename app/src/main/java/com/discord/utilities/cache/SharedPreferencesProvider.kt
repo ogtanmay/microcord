@@ -79,6 +79,10 @@ object SharedPreferencesProvider {
         "client_proxy_type",
         "client_proxy_host",
         "client_proxy_port",
+        "microcord_glass_enabled",
+        "microcord_glass_blur_radius",
+        "microcord_glass_opacity",
+        "microcord_glass_vibrancy",
     )
 
     @VisibleForTesting

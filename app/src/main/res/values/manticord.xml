@@ -211,6 +211,12 @@
     <string name="microcord_theme_file_reset">Use default</string>
     <string name="microcord_theme_reset_everything">Reset theme</string>
     <string name="microcord_theme_reset_everything_confirm">Remove every color, icon, image, font and sound change from this theme?</string>
+    <string name="microcord_glass_title">Liquid glass</string>
+    <string name="microcord_glass_preview_description">Live preview of the liquid glass surface</string>
+    <string name="microcord_glass_enabled">Use liquid glass surfaces</string>
+    <string name="microcord_glass_blur">Blur radius</string>
+    <string name="microcord_glass_opacity">Surface opacity</string>
+    <string name="microcord_glass_vibrancy">Highlight strength</string>
     <string name="microcord_settings_search_hint">Search settings</string>
     <string name="microcord_mark_all_as_read">Mark All as Read</string>
     <string name="microcord_mark_dms_as_read">Mark DMs as Read</string>
