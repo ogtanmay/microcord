@@ -30,7 +30,7 @@ jobs:
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 120
     env:
-      SOURCE_REPOSITORY: ogtanmay/microcord
+      SOURCE_REPOSITORY: microcord/microcord
       SOURCE_SHA: ${{ github.event.client_payload.sha }}
       BUILD_ID: ${{ github.event.client_payload.build_id }}
       RELEASE: ${{ github.event.client_payload.release }}
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       # The Kotlin daemon needed more than the repository's 4 GB to compile the release variant;
       # this runner has 16 GB, so the user-level file (which beats the project's) raises it.
